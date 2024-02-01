@@ -1,0 +1,47 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{@CONFIG.admin_url}}/travel_request">travel_request</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Settings</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-12">
+        <h4>{{@pagetitle}}</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" action="{{@CONFIG.admin_url}}/travel_request/settings" enctype="multipart/form-data">
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <label for="name">Menu Name</label>
+                            <input type="text" name="menu['menu_name']" id="name" placeholder="Menu Name"
+                                class="form-control"
+                                value="{{isset(@POST.menu['menu_name'])?@POST.menu['menu_name']:'' |esc}}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="name">Menu Icon</label>
+                            <input type="text" name="menu['menu_icon']" id="name" placeholder="Menu Icon"
+                                class="form-control"
+                                value="{{isset(@POST.menu['menu_icon'])?@POST.menu['menu_icon']:'' |esc}}">
+                        </div>
+
+
+
+
+                        <div class="col-md-12 mb-3">
+                            <button type="submit"
+                                class="btn btn-outline-success btn-sm">{{@@PARAMS.uid?'Update':'Save'}}</button>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

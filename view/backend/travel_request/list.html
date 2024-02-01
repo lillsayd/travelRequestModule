@@ -1,0 +1,193 @@
+<div class="row bg-light p-2 mb-3">
+    <div class="col-9">
+        <h5>{{@pagetitle}}</h5>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item font-small"><a href="{{@CONFIG.admin_url}}"><i
+                            class="fa-solid fa-home"></i></a>
+                </li>
+                <li class="breadcrumb-item font-small"><a href="{{@CONFIG.admin_url}}/travel_request">travel_request</a>
+                </li>
+                <li class="breadcrumb-item font-small active" aria-current="page">{{@pagetitle}}</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="col-3 d-flex justify-content-end">
+        <p>
+            <check if="{{\Module\User\Model\User::canEdit(@LoggedInUser)}}">
+                <a href="{{@CONFIG.admin_url}}/travel_request/new" class="btn btn-extra-sm btn-dark"> <i
+                        class="fa-solid fa-add"></i> New
+                </a>
+            </check>
+        </p>
+
+    </div>
+</div>
+
+<!-- Table List -->
+<div class="row">
+    <check if="{{@content.subset}}">
+        <true>
+            <div class="col-md-11 shadow-lg rounded bg-white p-3 ">
+                <table class="table table-responsive">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Created On</th>
+                            <th scope="col" class="text-end"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <f3:repeat group="{{@content.subset}}" value="{{@item}}" key="{{@key}}">
+                            <tr class="position-relative">
+                                <td>
+                                    <a href="{{@CONFIG.admin_url}}/travel_request/details/{{@item.uid}}"
+                                        class="stretched-link block_link">
+                                        <check if="{{@@item.image_thumb}}">
+                                            <img src="{{@item.image_thumb |esc}}" alt="" class="list_item_image">
+                                        </check>
+
+                                        <h5>{{@item.name |esc}}</h5>
+                                        <p class="font-small">
+                                            {{@@item.details?(strlen(@item.details) >
+                                            100?substr(@item.details,0,100).'...':@item.details):""}}
+                                        </p>
+                                    </a>
+                                </td>
+                                <td>{{date('M d, Y', strtotime(@item.created_at)) |esc}}</td>
+                                <td class="text-end action_links_table">
+                                    <div class="dropdown">
+                                        <a class="text-dark" href="#" role="button" id="more{{@key}}"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa-solid fa-ellipsis-vertical px-2"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="more{{@key}}">
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="{{@CONFIG.admin_url}}/travel_request/details/{{@item.uid}}"><i
+                                                        class="fa fa-eye"></i> View
+                                                </a>
+                                            </li>
+                                            <check if="{{\Module\User\Model\User::canEdit(@LoggedInUser)}}">
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                        href="{{@CONFIG.admin_url}}/travel_request/edit/{{@item.uid}}">
+                                                        <i class="fa-solid fa-pen-to-square"></i> edit
+                                                    </a>
+                                                </li>
+                                            </check>
+                                            <check if="{{\Module\User\Model\User::canDelete(@LoggedInUser)}}">
+                                                <li><a class="dropdown-item text-danger"
+                                                        href="{{@CONFIG.admin_url}}/travel_request/delete/{{@item.uid}}"
+                                                        onclick='return confirm("Are you sure you want to delete {{@item.name}}!");'>
+                                                        <i class="fa fa-trash"></i> Delete
+                                                    </a>
+                                                </li>
+                                            </check>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </f3:repeat>
+                    </tbody>
+                    <caption>
+                        <div class="col-12">
+                            <div class="mypagination">
+                                <f3:set urls="{{strstr(@PARAMS.0, '/page', true)}}" />
+                                <f3:set paglinkurl="{{@urls?@urls:@PARAMS.0}}" />
+                                <F3:pagebrowser items="{{@content.total}}" src="pagebrowser.html"
+                                    limit="{{@content.limit}}" link-path="{{@paglinkurl}}/page/" />
+                            </div>
+                        </div>
+                    </caption>
+                </table>
+            </div>
+        </true>
+        <false>
+            <include href="404.html" />
+        </false>
+
+    </check>
+
+</div>
+
+<!-- block List -->
+<div class="row">
+    <check if="{{@content.subset}}">
+        <true>
+            <f3:repeat group="{{@content.subset}}" value="{{@item}}" key="{{@key}}">
+                <div class="col-md-3 mb-3">
+                    <div class="card shadow border-0">
+
+                        <div class="position-relative" id="travel_request{{'_list_'.@key}}">
+                            <div class="item_actions">
+                                <div class="dropdown">
+                                    <a class="text-dark" href="#" role="button" id="more{{@key}}"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa-solid fa-ellipsis-vertical px-2"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="more{{@key}}">
+                                        <li>
+                                            <a class="dropdown-item"
+                                                href="{{@CONFIG.admin_url}}/travel_request/details/{{@item.uid}}"><i
+                                                    class="fa fa-eye"></i> View
+                                            </a>
+                                        </li>
+                                        <check if="{{\Module\User\Model\User::canEdit(@LoggedInUser)}}">
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="{{@CONFIG.admin_url}}/travel_request/edit/{{@item.uid}}">
+                                                    <i class="fa-solid fa-pen-to-square"></i> edit
+                                                </a>
+                                            </li>
+                                        </check>
+                                        <check if="{{\Module\User\Model\User::canEdit(@LoggedInUser)}}">
+                                            <li><a class="dropdown-item text-danger"
+                                                    href="{{@CONFIG.admin_url}}/travel_request/delete/{{@item.uid}}"
+                                                    onclick='return confirm("Are you sure you want to delete {{@item.name}}!");'>
+                                                    <i class="fa fa-trash"></i> Delete
+                                                </a></li>
+                                        </check>
+                                    </ul>
+                                </div>
+                            </div>
+                            <a href="{{@CONFIG.admin_url}}/travel_request/details/{{@item.uid}}"
+                                class="stretched-link block_link">
+                                <img src="{{@item.image_thumb??'res/default.png' |esc}}" alt="" width="100%"
+                                    class="list_image">
+                                <div class="card-body">
+                                    <h5>{{@item.name |esc}}</h5>
+                                    <p class="font-small">{{@@item.details?(strlen(@item.details) >
+                                        100?substr(@item.details,0,100).'...':@item.details):""}}</p>
+                                    <div class="text-muted text-small">
+                                        {{date_format(date_create(@item.created_at),"M d, Y") |esc}}
+                                    </div>
+                                </div>
+                            </a>
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </f3:repeat>
+
+            <div class="col-12 mt-3">
+                <div class="mypagination">
+                    <f3:set urls="{{strstr(@PARAMS.0, '/page', true)}}" />
+                    <f3:set paglinkurl="{{@urls?@urls:@PARAMS.0}}" />
+                    <F3:pagebrowser items="{{@content.total}}" src="pagebrowser.html" limit="{{@content.limit}}"
+                        link-path="{{@paglinkurl}}/page/" />
+                </div>
+            </div>
+
+        </true>
+        <false>
+            <include href="404.html" />
+        </false>
+
+    </check>
+
+</div>

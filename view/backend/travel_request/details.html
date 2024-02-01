@@ -1,0 +1,49 @@
+<div class="row bg-light p-2 mb-3">
+    <div class="col-9">
+        <h5>{{@pagetitle}}</h5>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item font-small"><a href="{{@CONFIG.admin_url}}"><i
+                            class="fa-solid fa-home"></i></a>
+                </li>
+                <li class="breadcrumb-item font-small"><a href="{{@CONFIG.admin_url}}/travel_request">travel_request</a>
+                </li>
+                <li class="breadcrumb-item font-small active" aria-current="page">{{@pagetitle}}</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="col-3 d-flex justify-content-end">
+        <p>
+            <check if="{{\Module\User\Model\User::canEdit(@LoggedInUser)}}">
+                <a href="{{@CONFIG.admin_url}}/travel_request/edit/{{@item.uid}}" class="btn btn-extra-sm btn-info"> <i
+                        class="fa-solid fa-pen-to-square"></i> Edit {{@pagetitle}}
+                </a>
+            </check>
+        </p>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row">
+                <check if="{{@item.image}}">
+                    <div class="col-md-4">
+                        <img src="{{@item.image?@item.image:'res/default.png' |esc}}" alt="" width="100%">
+                    </div>
+                </check>
+
+                <div class="col-md-{{@item.image?8:12}}">
+                    <div class="card-body">
+                        <h4>{{@item.name |esc}}</h4>
+                        <div>{{@item.details |raw}}</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

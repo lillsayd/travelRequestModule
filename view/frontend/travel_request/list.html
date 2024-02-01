@@ -1,0 +1,97 @@
+<div class="container">
+    <div class="row my-3">
+        <div class="col-8">
+            <h4>{{@pagetitle}}</h4>
+        </div>
+        <div class="col-4">
+            <form class="search-form" action="posts/search" method="GET">
+                <div class="row">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="term" placeholder="Search" value="{{@@GET.term}}">
+                        <button type="submit" class="btn btn-sm btn-outline-dark"> <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <check if="{{@content.subset}}">
+            <true>
+                <div class="col-12">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Image</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Details</th>
+                                <th scope="col">Created On</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <f3:repeat group="{{@content.subset}}" value="{{@item}}">
+                                <tr>
+                                    <th scope="row"><img src="{{@item.image_thumb??'res/default.png' |esc}}" alt=""
+                                            height="50px"></th>
+                                    <td>{{@item.name |esc}}</td>
+                                    <td>{{@@item.details?(strlen(@item.details) >
+                                        100?substr(@item.details,0,100).'...':@item.details):""}}
+                                    </td>
+                                    <td>{{date_format(date_create(@item.created_at),"M d, Y") |esc}}</td>
+                                    <td>
+                                        <a href="travel_request/details/{{@item.uid}}" class="btn btn-sm btn-info"> <i
+                                                class="fa fa-eye"></i> View</a>
+                                    </td>
+                                </tr>
+                            </f3:repeat>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <f3:repeat group="{{@content.subset}}" value="{{@item}}">
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <img src="{{@item.image_thumb |esc}}" alt="" width="100%">
+                            <div class="card-body">
+                                <h4>{{@item.name |esc}}</h4>
+                                <p>{{@@item.details?(strlen(@item.details) >
+                                    100?substr(@item.details,0,100).'...':@item.details):""}}</p>
+                                <div class="text-muted text-small">
+                                    {{date_format(date_create(@item.created_at),"M d, Y") |esc}}
+                                </div>
+                                <hr>
+                                <a href="travel_request/details/{{@item.uid}}" class="btn btn-sm btn-info"> <i
+                                        class="fa fa-eye"></i> View</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </f3:repeat>
+
+
+                <div class="col-12">
+                    <div class="mypagination">
+                        <f3:set urls="{{strstr(@PARAMS.0, '/page', true)}}" />
+                        <f3:set paglinkurl="{{@urls?@urls:@PARAMS.0}}" />
+                        <F3:pagebrowser items="{{@content.total}}" src="pagebrowser.html" limit="{{@content.limit}}"
+                            link-path="{{@paglinkurl}}/page/" />
+                    </div>
+                </div>
+            </true>
+            <false>
+                <div class="col-12">
+                    <div class="not-found-container">
+                        <span class="not-fount-icon"><i class="fa fa-warning"></i></span>
+                        <h3>Sorry No records found, Check again later</h3>
+                    </div>
+                </div>
+
+            </false>
+
+        </check>
+
+    </div>
+</div>
